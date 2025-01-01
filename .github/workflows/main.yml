@@ -22,6 +22,8 @@ jobs:
         with:
           PING_URL: '10.0.0.4'
           FILE_OVPN: '.github/workflows/vpnconfig.ovpn'
+        env:
+          CA_CRT: ${{ secrets.CA_CRT}}
       - name: Check Connect VPN
         run: echo ${{ steps.connect_vpn.outputs.STATUS }}
 
