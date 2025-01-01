@@ -18,6 +18,11 @@ jobs:
           sudo apt update
           sudo apt install -y openvpn openvpn-systemd-resolved
 
+      - name: Create VPN Configuration File
+        run: |
+          echo "${{ secrets.VPN_CONFIG }}" > .github/workflows/vpnconfig.ovpn
+          ls -la .github/workflows/
+
       - name: Connect VPN
         uses: golfzaptw/action-connect-ovpn@master
         id: connect_vpn
