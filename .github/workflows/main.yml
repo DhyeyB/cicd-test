@@ -16,7 +16,16 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y openvpn openvpn-systemd-resolved
-      - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@v2"
+      - name: Connect VPN
+        uses: golfzaptw/action-connect-ovpn@master
+        id: connect_vpn
         with:
-          config_file: .github/workflows/vpnconfig.ovpn
+          PING_URL: '10.0.0.4'
+          FILE_OVPN: '.github/workflows/vpnconfig.ovpn'
+      - name: Check Connect VPN
+        run: echo ${{ steps.connect_vpn.outputs.STATUS }}
+
+    #   - name: Connect to VPN
+    #     uses: "kota65535/github-openvpn-connect-action@v2"
+    #     with:
+    #       config_file: .github/workflows/vpnconfig.ovpn
