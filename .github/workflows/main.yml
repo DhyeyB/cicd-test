@@ -45,6 +45,7 @@ jobs:
           ls -la
           ssh -o StrictHostKeyChecking=no -i private_key $USER_NAME@$HOSTNAME '
             DEST_DIR="/opt/edugem/scripts"
+            cd $DEST_DIR
             touch test.txt
             ls -la
             '
