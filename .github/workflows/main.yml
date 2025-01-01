@@ -12,10 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Install OpenVPN
         run: |
           sudo apt update
           sudo apt install -y openvpn openvpn-systemd-resolved
+
       - name: Connect VPN
         uses: golfzaptw/action-connect-ovpn@master
         id: connect_vpn
@@ -26,9 +28,26 @@ jobs:
           CA_CRT: ${{ secrets.CA_CRT}}
           USER_CRT: ${{ secrets.USER_CRT }}
           USER_KEY: ${{ secrets.USER_KEY }}
+
       - name: Check Connect VPN
         run: echo ${{ steps.connect_vpn.outputs.STATUS }}
 
+      - name: Build & Deploy of pdf2data backend code
+        env:
+          PRIVATE_KEY: |
+            ${{ secrets.LOGIN_SSH_PRI_KEY }}
+          HOSTNAME: ${{ secrets.HOSTNAME }}
+          USER_NAME: "deploy"
+          APP_ENV: "prod"
+        run: |
+          APP_ENV=$(echo "prod")
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ls -la
+          ssh -o StrictHostKeyChecking=no -i private_key $USER_NAME@$HOSTNAME '
+            DEST_DIR="/opt/edugem/scripts"
+            touch test.txt
+            ls -la
+            '
     #   - name: Connect to VPN
     #     uses: "kota65535/github-openvpn-connect-action@v2"
     #     with:
